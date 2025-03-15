@@ -4,6 +4,12 @@ GameLoop::GameLoop()
 {
 	window = NULL;
 	renderer = NULL;
+	GameState = false;
+}
+
+bool GameLoop::GetGameState()
+{
+	return GameState;
 }
 
 void GameLoop::Initialize()
@@ -17,6 +23,8 @@ void GameLoop::Initialize()
 		if (renderer) 
 		{
 			std::cout << "Success";
+			GameState = true;
+			bird = TextureManager::Texture("Assets/Hitman.png", renderer);
 		}
 		else 
 		{
@@ -31,12 +39,39 @@ void GameLoop::Initialize()
 
 void GameLoop::Events()
 {
+	SDL_PollEvent(&event);
+	if (event.type == SDL_EventType::SDL_EVENT_QUIT) 
+	{
+		GameState = false;
+	}
+	if (event.type == SDL_EventType::SDL_EVENT_MOUSE_BUTTON_DOWN) 
+	{
+		std::cout << "Mouse pressed" << std::endl;
+	}
+	if (event.type == SDL_EventType::SDL_EVENT_KEY_DOWN)
+	{
+		if (event.key.key == SDLK_SPACE) 
+		{
+			std::cout << "Space pressed" << std::endl;
+		}
+	}
+}
 
+void GameLoop::Update()
+{
+	sourceBird.w = 713;
+	sourceBird.h = 463;
+	sourceBird.x = sourceBird.y = 10;
+
+	destinationBird.w = 10;
+	destinationBird.h = 10;
+	destinationBird.x = destinationBird.y = 10;
 }
 
 void GameLoop::Render()
 {
 	SDL_RenderClear(renderer);
+	SDL_RenderTexture(renderer, bird, &sourceBird, &destinationBird);
 	SDL_RenderPresent(renderer);
 }
 

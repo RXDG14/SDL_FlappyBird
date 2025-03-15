@@ -6,12 +6,13 @@ int main(int argc, char** argv)
 {
 	gameLoop->Initialize();
 	
-	while (1) 
+	while (gameLoop->GetGameState()) 
 	{
 		gameLoop->Render();
+		gameLoop->Events();
+		gameLoop->Update();
 	}
 	
 	gameLoop->Clear();
-	
 	return 0;
 }
